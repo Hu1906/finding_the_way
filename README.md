@@ -62,6 +62,7 @@ NODE_ENV=development
 Feel free to submit issues or pull requests for improvements or bug fixes.
 
 ### Structure
+```
 my-mern-app/backend/src/
 ├── server.js
 ├── config/
@@ -86,3 +87,4 @@ my-mern-app/backend/src/
     └── geo.js               #Chứa hàm tiện ích toán học
 
 my-mern-app/frontend/src/    #Đang xây dựng
+```
