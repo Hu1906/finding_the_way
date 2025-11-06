@@ -34,6 +34,11 @@ PORT=
 NODE_ENV=development
 
 ### Running the Application
+0. If your database has no data yet:
+   ```
+   cd backend/src/config
+   node addMapToDB.js
+   ```
 
 1. Start the backend server:
    ```
@@ -55,3 +60,29 @@ NODE_ENV=development
 ### Contributing
 
 Feel free to submit issues or pull requests for improvements or bug fixes.
+
+### Structure
+my-mern-app/backend/src/
+├── server.js
+├── config/
+│   |── addMapToDB.js        #Chuyển file .osm vào trong MongoDB  
+|   |── db.js                #Kết nối với MongoDB
+|   └── haibatrung.osm       #File .osm lấy từ open street map
+├── controllers/
+│   └── routeController.js   #Nhận request từ frontend -> chạy thuật toán -> trả route kết quả
+├── models/
+│   ├── nodeModel.js         #Lược đồ Node
+│   ├── wayModel.js          #Lược đồ Way
+│   └── edgeModel.js         #Lược đồ Edge
+├── routes/
+│   └── routeRoutes.js       #Khai báo endpoint api/route
+├── services/
+│   ├── algorithmManager.js  #Quản lý danh sách thuật toán
+│   ├── astarService.js      #Triển khai thuật toán A*
+│   └── graphLoader.js       #Tải toàn bộ nodes graph về RAM để thuật toán truy cập nhanh
+|── middleware/  
+|   └── rateLimiter          #Giới hạn request gửi về máy chủ trong một phút
+└── utils/
+    └── geo.js               #Chứa hàm tiện ích toán học
+
+my-mern-app/frontend/src/    #Đang xây dựng
