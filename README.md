@@ -29,9 +29,11 @@ A pathfinding website based on ai algorithms of IT3160 HUST.
 ### Configuration
 
 1. Create a `.env` file in the `backend` directory include:
+```
 DATABASE_URL=<Your MongoDB String>
-PORT=
+PORT
 NODE_ENV=development
+```
 
 ### Running the Application
 0. If your database has no data yet:
