@@ -1,5 +1,5 @@
 export async function findPath(start, end) {
-  const response = await fetch('/findpath', {
+  const response = await fetch('/route', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

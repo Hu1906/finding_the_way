@@ -3,15 +3,15 @@ const graphLoader = require('../services/graphLoader');
 
 /**
  * POST /api/route
- * Body: { startId, goalId, algorithm }
+ * Body: { startlat, startlon, goallat, goallon, algorithm }
  */
 exports.findRoute = async (req, res) => {
   try {
-    const { startId, goalId, algorithm } = req.body;
+    const { startlat, startlon, goallat, goallon, algorithm } = req.body;
 
     // 1️⃣ Kiểm tra đầu vào
-    if (!startId || !goalId) {
-      return res.status(400).json({ error: 'Thiếu startId hoặc goalId' });
+    if (!startlat || !startlon || !goallat || !goallon) {
+      return res.status(400).json({ error: 'Thiếu startlat, startlon, goallat hoặc goallon' });
     }
 
     // 2️⃣ Đảm bảo graph đã load vào RAM
@@ -19,9 +19,12 @@ exports.findRoute = async (req, res) => {
       await graphLoader.loadAll();
     }
 
+    const startId = await graphLoader.nodeTranfers(startlat, startlon);
+    const goalId = await graphLoader.nodeTranfers(goallat, goallon);
+
     // 3️⃣ Kiểm tra tồn tại node trong graph
     const { nodes, graph } = await graphLoader.getGraph();
-    if (!nodes.has(startId) || !nodes.has(goalId)) {
+    if (!graph.has(startId) || !graph.has(goalId)) {
       return res.status(404).json({ error: 'Không tìm thấy node tương ứng trong graph' });
     }
 
@@ -39,10 +42,14 @@ exports.findRoute = async (req, res) => {
     if (!result || !result.path) {
       return res.status(404).json({ error: 'Không tìm thấy đường đi khả thi' });
     }
-
+    const detailedPath = [];
+    for (const nodeId of result.path) {
+      const coord = await graphLoader.tranferNode(nodeId);
+      detailedPath.push({ lat: coord.lat, lon: coord.lon });
+    }
     return res.status(200).json({
       algorithm: algo,
-      path: result.path,
+      path: detailedPath,
       steps: result.steps,
     });
   } catch (err) {
