@@ -5,8 +5,8 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/findpath': {
-        target: 'http://localhost:3001',
+      '/route': {
+        target: 'http://localhost:5000',
         changeOrigin: true,
       },
     },

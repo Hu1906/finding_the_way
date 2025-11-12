@@ -62,6 +62,13 @@ function App() {
         TEST API
       </button>
 
+    <button
+        onClick={() => findPath(startPoint, endPoint).then(alert)}
+        style={appStyles.buttonTest}
+      >
+        Tìm đường
+      </button>
+
       <div style={appStyles.mapContainer}>
         <MapView
           center={center}
