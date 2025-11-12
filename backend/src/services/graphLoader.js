@@ -38,6 +38,23 @@ class GraphLoader {
             graph: this.graph
         };
     }
+
+    async nodeTranfers(lat, lon) {
+        let closestNode = null;
+        let minDistance = Infinity;
+        for (const [id, node] of this.nodes) {
+            const distance = Math.sqrt(Math.pow(node.lat - lat, 2) + Math.pow(node.lon - lon, 2));
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestNode = id;
+            }
+        }
+        return closestNode;
+    }
+
+    async tranferNode(nodeId) {
+        return { lat: this.nodes.get(nodeId).lat, lon: this.nodes.get(nodeId).lon };
+    }
 }
 
 module.exports =  new GraphLoader();
