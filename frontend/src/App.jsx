@@ -13,6 +13,7 @@ function App() {
   const center = [20.9995, 105.8463];
 
   const handleMapClick = (latlng) => {
+    console.log('Map clicked at:', latlng);
     if (!startPoint) {
       setStartPoint(latlng);
       setEndPoint(null);
@@ -29,10 +30,11 @@ function App() {
     }
   };
 
-  const handleFindPath = async (end) => {
+  const handleFindPath = async () => {
+    console.log('Finding path from', startPoint, 'to', endPoint);
     try {
       setLoading(true);
-      const data = await findPath(startPoint, end);
+      const data = await findPath(startPoint, endPoint);
       setPath(data.path || []);
     } catch (err) {
       setError(err.message);
@@ -56,14 +58,7 @@ function App() {
       </header>
 
       <button
-        onClick={() => findPath({ lat: 21.0136, lng: 105.8451 }, { lat: 21.0142, lng: 105.8445 }).then(alert)}
-        style={appStyles.buttonTest}
-      >
-        TEST API
-      </button>
-
-    <button
-        onClick={() => findPath(startPoint, endPoint).then(alert)}
+        onClick={handleFindPath}
         style={appStyles.buttonTest}
       >
         Tìm đường

@@ -8,7 +8,7 @@ const graphLoader = require('../services/graphLoader');
 exports.findRoute = async (req, res) => {
   try {
     const { startlat, startlon, goallat, goallon, algorithm } = req.body;
-
+    console.log('findRoute called with:', req.body);
     // 1️⃣ Kiểm tra đầu vào
     if (!startlat || !startlon || !goallat || !goallon) {
       return res.status(400).json({ error: 'Thiếu startlat, startlon, goallat hoặc goallon' });

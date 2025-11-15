@@ -17,6 +17,13 @@ const redIcon = new L.Icon({
   iconAnchor: [12, 41],
 });
 
+// Xác định khu vực giới hạn (Hai Bà Trưng và lân cận)
+// (lat, lng) của góc Tây-Nam
+const corner1 = L.latLng(20.98, 105.82); 
+// (lat, lng) của góc Đông-Bắc
+const corner2 = L.latLng(21.04, 105.89); 
+const bounds = L.latLngBounds(corner1, corner2);
+
 function MapClickHandler({ onClick }) {
   useMapEvents({
     click: (e) => onClick(e.latlng),
@@ -30,6 +37,8 @@ export default function MapView({ center, startPoint, endPoint, path, onMapClick
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        maxBounds={bounds}
+        minZoom={15}
       />
       <MapClickHandler onClick={onMapClick} />
 

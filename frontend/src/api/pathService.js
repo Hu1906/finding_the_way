@@ -1,12 +1,12 @@
 export async function findPath(start, end) {
-  const response = await fetch('/route', {
+  const response = await fetch('api/route', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      startLat: start.lat,
-      startLon: start.lng,
-      endLat: end.lat,
-      endLon: end.lng,
+      startlat: start.lat,
+      startlon: start.lng,
+      goallat: end.lat,
+      goallon: end.lng,
     }),
   });
 
