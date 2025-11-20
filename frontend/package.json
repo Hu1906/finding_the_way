@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
-    "test": "vitest"
+    "start": "cross-env NODE_OPTIONS=--openssl-legacy-provider react-scripts start",
+    "build": "cross-env NODE_OPTIONS=--openssl-legacy-provider react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
   },
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
@@ -44,5 +44,6 @@
     "@vitejs/plugin-react": "^4.2.1",
     "vite": "^6.4.1",
     "vitest": "^2.1.4"
-  }
+  },
+  "proxy": "http://localhost:5000"
 }

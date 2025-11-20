@@ -1,5 +1,5 @@
-const express = require('express');
 const path = require('path');
+const express = require('express');
 const dotenv = require('dotenv');
 dotenv.config();
 const connectDB = require('./config/db.js');
@@ -12,12 +12,12 @@ const graphLoader = require('./services/graphLoader');
 // Nạp các thuật toán tìm đường
 const astarService = require('./services/astarService');
 // Nếu sau này có thêm thuật toán khác, chỉ cần require ở đây
-// const dijkstraService = require('./services/dijkstraService');
+const dijkstraService = require('./services/dijkstraService');
 // const bfsService = require('./services/bfsService');
 
 // Đăng ký vào algorithmManager
 algorithmManager.register(astarService);
-// algorithmManager.register(dijkstraService);
+algorithmManager.register(dijkstraService);
 // algorithmManager.register(bfsService);
 
 
@@ -27,7 +27,9 @@ algorithmManager.register(astarService);
 
 
 const app = express();
+app.set('trust proxy', 1);
 const PORT = process.env.PORT || 5000;
+
 
 // Middleware
 app.use(cors());

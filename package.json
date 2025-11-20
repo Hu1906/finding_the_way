@@ -1,7 +1,7 @@
 {
   "name": "my-mern-app",
   "version": "1.0.0",
-  "description": "A MERN stack application",
+  "description": "A MERN stack Map application for IT3160",
   "main": "index.js",
   "scripts": {
     "start": "node backend/src/server.js",

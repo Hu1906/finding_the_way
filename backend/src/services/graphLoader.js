@@ -16,16 +16,13 @@ class GraphLoader {
         for (const n of nodes) { this.nodes.set(n.id, n); }
         for (const e of edges) {
             if (!this.graph.has(e.from)) {
-                this.graph.set(e.from, []);
+                this.graph.set(e.from, new Map());
             }
-            if (!this.graph.has(e.to)) {
-                this.graph.set(e.to, []);
-            }
-            this.graph.get(e.from).push({ to: e.to, distance: e.distance });
-            this.graph.get(e.to).push({ to: e.from, distance: e.distance });
+            
+            this.graph.get(e.from).set(e.to, e);
         }
         console.log(`Graph loaded: ${this.nodes.size} nodes, ${edges.length} edges.`);
-
+        console.log('✓ Graph is ready.');
     }
 
     isLoaded() {
@@ -37,23 +34,6 @@ class GraphLoader {
             nodes: this.nodes,
             graph: this.graph
         };
-    }
-
-    async nodeTranfers(lat, lon) {
-        let closestNode = null;
-        let minDistance = Infinity;
-        for (const [id, node] of this.nodes) {
-            const distance = Math.sqrt(Math.pow(node.lat - lat, 2) + Math.pow(node.lon - lon, 2));
-            if (distance < minDistance) {
-                minDistance = distance;
-                closestNode = id;
-            }
-        }
-        return closestNode;
-    }
-
-    async tranferNode(nodeId) {
-        return { lat: this.nodes.get(nodeId).lat, lon: this.nodes.get(nodeId).lon };
     }
 }
 
