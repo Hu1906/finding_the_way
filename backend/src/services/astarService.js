@@ -1,8 +1,7 @@
-// src/services/astarService.js
 const { haversineDistance } = require('../utils/geo');
 
 /**
- * PriorityQueue đơn giản cho A* (Giữ nguyên)
+ * PriorityQueue đơn giản cho A*
  */
 class PriorityQueue {
     constructor() {
@@ -85,11 +84,11 @@ function aStar(nodes, graph, startId, goalId) {
 
         const neighborsMap = graph.get(current) || new Map();
         
-        // SỬA: Lặp qua Map các cạnh đi ra
+        //Lặp qua Map các cạnh đi ra
         for (const [neighborId, edgeData] of neighborsMap.entries()) { 
             if (closedSet.has(neighborId)) continue;
 
-            // ✅ THAY ĐỔI TẠI ĐÂY: Dùng khoảng cách (distance) làm chi phí
+            //Dùng khoảng cách (distance) làm chi phí
             const costToNeighbor = edgeData.distance; 
 
             const tentativeG = gScore.get(current) + costToNeighbor;
