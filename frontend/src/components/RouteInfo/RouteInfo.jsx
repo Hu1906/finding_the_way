@@ -40,8 +40,12 @@ const RouteInfo = ({ route, error, selectingPoint }) => {
             <span className="value">{route.distance} km</span>
           </div>
           <div className="detail-item">
-            <span className="label">Thời gian:</span>
+            <span className="label">Thời gian đi:</span>
             <span className="value">~{route.duration} phút</span>
+          </div>
+          <div className="detail-item">
+            <span className="label">Thời gian thực thi thuật toán:</span>
+            <span className="value">~{route.elapsedTime.toFixed(3)} ms</span>
           </div>
         </div>
       </div>

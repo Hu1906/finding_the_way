@@ -1,4 +1,5 @@
 const { haversineDistance } = require('../utils/geo'); 
+const { performance } = require('perf_hooks');
 
 /**
  * PriorityQueue đơn giản cho Dijkstra
@@ -32,6 +33,7 @@ class PriorityQueue {
  * {string} goalId - ID node đích
  */
 function dijkstra(nodes, graph, startId, goalId) {
+    const startTime = performance.now();
     if (!graph.has(startId) || !graph.has(goalId)) {
         console.warn(`⚠️ Node không tồn tại trong graph: ${startId} hoặc ${goalId}`);
         return null;
@@ -71,12 +73,16 @@ function dijkstra(nodes, graph, startId, goalId) {
                 path.unshift(temp);
             }
             
+            const endTime = performance.now();
+            const elapsedTime = endTime - startTime;
+            
             console.log(`✅ Dijkstra tìm thấy đường sau ${iterations} bước`);
             return {
                 path: path,
                 steps: path.length - 1,
                 distance: totalDistance,
                 timeCost: gScore.get(goalId), // Trả về tổng chi phí (thời gian)
+                elapsedTime: elapsedTime, // Thời gian thực thi thuật toán (ms)
             };
         }
 

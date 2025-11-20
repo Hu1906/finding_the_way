@@ -28,7 +28,7 @@ export const findRoute = async (startPoint, endPoint, algorithm = 'astar') => {
           lat: endPoint[0],
           lng: endPoint[1]
         },
-        algorithm: algorithm
+        algorithm: algorithm,
       })
     });
 
@@ -47,6 +47,7 @@ export const findRoute = async (startPoint, endPoint, algorithm = 'astar') => {
       coordinates: data.path,
       distance: metersToKm(data.distance),
       duration: secondsToMinutes(data.duration),
+      elapsedTime: data.elapsedTime,
       algorithm: data.algorithm,
       steps: data.steps,
       raw: data

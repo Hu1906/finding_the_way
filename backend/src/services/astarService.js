@@ -1,4 +1,5 @@
 const { haversineDistance } = require('../utils/geo');
+const { performance } = require('perf_hooks');
 
 /**
  * PriorityQueue đơn giản cho A*
@@ -28,6 +29,7 @@ class PriorityQueue {
  * @returns {Object | null} Kết quả tìm kiếm
  */
 function aStar(nodes, graph, startId, goalId) {
+    const startTime = performance.now();
     if (!graph.has(startId) || !graph.has(goalId)) {
         console.warn(`⚠️ Node không tồn tại trong graph: ${startId} hoặc ${goalId}`);
         return null;
@@ -62,6 +64,7 @@ function aStar(nodes, graph, startId, goalId) {
             let temp = current;
             let totalDistance = 0;
             
+            
             // Tính tổng quãng đường khi reconstruct path
             while (cameFrom.has(temp)) {
                 const prev = cameFrom.get(temp);
@@ -70,6 +73,8 @@ function aStar(nodes, graph, startId, goalId) {
                 temp = prev;
                 path.unshift(temp);
             }
+            const endTime = performance.now();
+            const elapsedTime = endTime - startTime;
             
             console.log(`✅ A* tìm thấy đường sau ${iterations} bước`);
             return {
@@ -77,6 +82,7 @@ function aStar(nodes, graph, startId, goalId) {
                 steps: path.length - 1,
                 distance: totalDistance, // Trả về tổng khoảng cách
                 timeCost: gScore.get(goalId), // Trả về tổng thời gian (cost)
+                elapsedTime: elapsedTime, // Thời gian thực thi thuật toán (ms)
             };
         }
 
