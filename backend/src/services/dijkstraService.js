@@ -80,8 +80,7 @@ function dijkstra(nodes, graph, startId, goalId) {
             return {
                 path: path,
                 steps: path.length - 1,
-                distance: totalDistance,
-                timeCost: gScore.get(goalId), // Trả về tổng chi phí (thời gian)
+                distance: totalDistance, // Trả về tổng khoảng cách
                 elapsedTime: elapsedTime, // Thời gian thực thi thuật toán (ms)
             };
         }

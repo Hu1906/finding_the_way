@@ -137,22 +137,17 @@ exports.findRoute = async (req, res) => {
             return [node.lat, node.lon];
         });
 
-        let totalDistance = 0;
-        for (let i = 0; i < result.path.length - 1; i++) {
-            const nodeA = nodes.get(result.path[i]);
-            const nodeB = nodes.get(result.path[i + 1]);
-            totalDistance += haversineDistance(nodeA.lat, nodeA.lon, nodeB.lat, nodeB.lon);
-        }
+        
 
-        const estimatedDuration = (totalDistance / 30) * 3600;
+        const estimatedDuration = (result.distance / 30) * 3600;
 
-        console.log(`✅ Found path: ${result.path.length} nodes, ${totalDistance.toFixed(2)} km`);
+        console.log(`✅ Found path: ${result.path.length} nodes, ${result.distance.toFixed(2)} km`);
 
         return res.status(200).json({
             success: true,
             algorithm: algo,
             path: coordinates,
-            distance: totalDistance * 1000,
+            distance: result.distance * 1000,
             duration: estimatedDuration,
             elapsedTime: result.elapsedTime,
             steps: result.steps,

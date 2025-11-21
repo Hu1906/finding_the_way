@@ -2,7 +2,8 @@ const { haversineDistance } = require('../utils/geo');
 const { performance } = require('perf_hooks');
 
 /**
- * PriorityQueue đơn giản cho A*
+ * PriorityQueue đơn giản cho Greedy Best-First Search
+ * (Cấu trúc giống A* nhưng chỉ dùng heuristic làm priority)
  */
 class PriorityQueue {
     constructor() {
@@ -21,14 +22,14 @@ class PriorityQueue {
 }
 
 /**
- * Thuật toán A* tìm đường ngắn nhất giữa 2 node
+ * Thuật toán Greedy Best-First Search tìm đường ngắn nhất giữa 2 node
  * @param {Map<string, Object>} nodes - Map chứa node.id → { lat, lon }
  * @param {Map<string, Map<string, Object>>} graph - Map<NodeId, Map<NeighborId, EdgeData>>
  * @param {string} startId - ID node bắt đầu
  * @param {string} goalId - ID node đích
  * @returns {Object | null} Kết quả tìm kiếm
  */
-function aStar(nodes, graph, startId, goalId) {
+function greedyBestFirstSearch(nodes, graph, startId, goalId) {
     const startTime = performance.now();
     if (!graph.has(startId) || !graph.has(goalId)) {
         console.warn(`⚠️ Node không tồn tại trong graph: ${startId} hoặc ${goalId}`);
@@ -106,19 +107,18 @@ function aStar(nodes, graph, startId, goalId) {
                 if (!neighborNode) continue;
 
                 // Heuristic (h) vẫn dùng khoảng cách (haversineDistance)
-                const h = haversineDistance(neighborNode.lat, neighborNode.lon, goalNode.lat, goalNode.lon);
-                const f = tentativeG + h; // f = g(distance) + h(distance)
+                const h = haversineDistance(neighborNode.lat, neighborNode.lon, goalNode.lat, goalNode.lon)
 
-                openSet.enqueue(neighborId, f);
+                openSet.enqueue(neighborId, h); // Chỉ dùng h làm priority
             }
         }
     }
 
-    console.warn(`❌ A* không tìm thấy đường sau ${iterations} bước`);
+    console.warn(`❌ Greedy Best-First Search không tìm thấy đường sau ${iterations} bước`);
     return null;
 }
 
 module.exports = {
-    name: 'astar',
-    findPath: aStar,
+    name: 'greedyBestFirstSearch',
+    findPath: greedyBestFirstSearch,
 };
