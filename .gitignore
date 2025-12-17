@@ -32,7 +32,6 @@ logs/
 # ======================================
 dist/
 build/
-public/
 
 # Nếu bạn build frontend và copy vào public thì public không cần push
 # Nếu muốn commit frontend thì giữ nguyên folder frontend/
