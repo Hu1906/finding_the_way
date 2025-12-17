@@ -6,7 +6,7 @@ const rateLimit = require('express-rate-limit');
  */
 const limiter = rateLimit({
   windowMs: 60 * 1000,          // 1 phút
-  max: 60,                      // Tối đa 60 request / phút / IP
+  max: 40,                      // Tối đa 40 request / phút / IP
   standardHeaders: true,        // Trả thông tin giới hạn trong header (RateLimit-*)
   legacyHeaders: false,         // Ẩn header cũ X-RateLimit-*
   message: {

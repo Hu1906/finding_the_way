@@ -14,11 +14,18 @@ const astarService = require('./services/astarService');
 // Nếu sau này có thêm thuật toán khác, chỉ cần require ở đây
 const dijkstraService = require('./services/dijkstraService');
 const greedyBestFirstSearchService = require('./services/greedyBestFirstSearchService');
+const ucsService = require('./services/ucsService');
+const bfsService = require('./services/bfsService');
+const dfsService = require('./services/dfsService');
+
 
 // Đăng ký vào algorithmManager
 algorithmManager.register(astarService);
 algorithmManager.register(dijkstraService);
 algorithmManager.register(greedyBestFirstSearchService);
+algorithmManager.register(ucsService);
+algorithmManager.register(bfsService);
+algorithmManager.register(dfsService);
 
 
 // =============================
