@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 // Đã import các hàm cần thiết để dùng trong displayRoute/resetMap
-import { initializeMap, createStartMarker, createEndMarker, drawRoute, fitBounds } from '../services/mapService';
+import { initializeMap, createStartMarker, createEndMarker, drawRoute, drawTraceAlgorithm, fitBounds } from '../services/mapService';
 
 /**
  * Custom hook để quản lý bản đồ Leaflet
@@ -14,6 +14,7 @@ export const useMap = (mapContainerRef) => {
     const startMarkerRef = useRef(null);
     const endMarkerRef = useRef(null);
     const routeLayerRef = useRef(null); // Ref để lưu lớp (layer) của đường đi
+    const traceLayerRef = useRef(null); // Ref để lưu lớp (layer) của trace algorithm
 
     // === Hook 1: Chỉ khởi tạo bản đồ (chạy 1 lần) ===
     useEffect(() => {
@@ -90,25 +91,14 @@ export const useMap = (mapContainerRef) => {
     }, [map, startPoint, endPoint]);
 
 
-    // === HÀM VẼ ROUTE (FIX LỖI CẮT NGẮN ĐOẠN CUỐI) ===
+    // === HÀM VẼ ROUTE ===
     const displayRoute = useCallback((routeData) => {
         if (!map || !routeData || !routeData.coordinates) return;
 
         // 1. Lấy bản sao của mảng tọa độ
-        let finalCoordinates = [...routeData.coordinates];
+        let finalCoordinates = [startPoint, ...routeData.coordinates, endPoint];
 
-        // 2. FIX: Buộc đường đi phải kết thúc tại tọa độ Marker B (endPoint)
-        if (finalCoordinates.length > 0 && endPoint) {
-            const lastCoord = finalCoordinates[finalCoordinates.length - 1];
-            
-            // Chỉ thêm vào nếu node cuối của A* không khớp với vị trí marker cuối
-            // (Thường xảy ra khi node cuối là đường cụt trong dữ liệu OSM)
-            if (lastCoord[0] !== endPoint[0] || lastCoord[1] !== endPoint[1]) {
-                 finalCoordinates.push(endPoint); 
-            }
-        }
-
-        // 3. Xóa route cũ và vẽ route mới
+        // 2. Xóa route cũ và vẽ route mới
         if (routeLayerRef.current) {
             map.removeLayer(routeLayerRef.current);
         }
@@ -121,6 +111,27 @@ export const useMap = (mapContainerRef) => {
             fitBounds(map, startPoint, endPoint);
         }
     }, [map, startPoint, endPoint]); // Cần có endPoint trong dependencies
+
+    const displayTraceAlgorithm = useCallback(async (traceData) => {
+        if (!map || !traceData || !traceData.coordinates) return;
+        
+        const sliceSize = traceData.length/10 || 1000;
+        const visibleNodes = [];
+
+        for (let i = 0; i < traceData.length; i += sliceSize) {
+            visibleNodes.push(traceData.slice(i, i + sliceSize));
+
+            if (traceLayerRef.current) {
+                map.removeLayer(traceLayerRef.current);
+            }
+            traceLayerRef.current = drawTraceAlgorithm(map, visibleNodes);
+            await new Promise(resolve => setTimeout(resolve, 100)); // Tạm dừng 100ms để tạo hiệu ứng
+        }
+
+        if (startPoint && endPoint) {
+            fitBounds(map, startPoint, endPoint);
+        }
+    }, [map, startPoint, endPoint]);
 
     // === HÀM RESET MAP (Giữ nguyên) ===
     const resetMap = useCallback(() => {
@@ -145,6 +156,7 @@ export const useMap = (mapContainerRef) => {
         selectingPoint,
         setSelectingPoint,
         displayRoute,
+        displayTraceAlgorithm,
         resetMap
     };
 };

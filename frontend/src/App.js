@@ -13,6 +13,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState('astar');
+  const [traceVisible, setTraceVisible] = useState(true);
 
   const {
     startPoint,
@@ -22,6 +23,7 @@ function App() {
     selectingPoint,
     setSelectingPoint,
     displayRoute,
+    displayTraceAlgorithm,
     resetMap
   } = useMap(mapContainerRef);
 
@@ -79,6 +81,8 @@ function App() {
           onSelectEnd={() => setSelectingPoint('end')}
           onFindRoute={handleFindRoute}
           onReset={handleReset}
+          traceVisibility={traceVisible}
+          onChangeTraceVisibility={() => setTraceVisible(!traceVisible)}
         />
 
         <RouteInfo
