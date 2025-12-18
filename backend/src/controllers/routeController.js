@@ -151,6 +151,7 @@ exports.findRoute = async (req, res) => {
             duration: estimatedDuration,
             elapsedTime: result.elapsedTime,
             steps: result.steps,
+            orderSet: result.orderSet,
             startPoint: { lat: nodes.get(startId).lat, lon: nodes.get(startId).lon }, 
             endPoint: { lat: nodes.get(goalId).lat, lon: nodes.get(goalId).lon }
         });
