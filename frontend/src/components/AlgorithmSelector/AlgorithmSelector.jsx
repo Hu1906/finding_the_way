@@ -5,6 +5,9 @@ const ALGORITHMS = [
   { id: 'astar', name: 'A* (A-Star)', description: 'Nhanh nhưng vẫn đảm bảo chính xác' },
   { id: 'dijkstra', name: 'Dijkstra', description: 'Đảm bảo đường đi ngắn nhất' },
   { id: 'greedyBestFirstSearch', name: 'Greedy Best-First Search', description: 'Nhanh nhưng không đảm bảo ngắn nhất' },
+  { id: 'ucs', name: 'Uniform Cost Search', description: 'Tìm đường đi tối ưu theo chi phí' },
+  { id: 'bfs', name: 'Breadth-First Search (BFS)', description: 'Tìm kiếm theo chiều rộng' },
+  { id: 'dfs', name: 'Depth-First Search (DFS)', description: 'Tìm kiếm theo chiều sâu' },
 ];
 
 const AlgorithmSelector = ({ selectedAlgorithm, onChange, disabled }) => {
