@@ -7,23 +7,95 @@ const { performance } = require('perf_hooks');
  */
 class PriorityQueue {
     constructor() {
-        this.items = [];
+        this.heap = [];
     }
 
+    // ========== Helper ==========
+    parent(i) {
+        return Math.floor((i - 1) / 2);
+    }
+
+    left(i) {
+        return 2 * i + 1;
+    }
+
+    right(i) {
+        return 2 * i + 2;
+    }
+
+    swap(i, j) {
+        [this.heap[i], this.heap[j]] = [this.heap[j], this.heap[i]];
+    }
+
+    // ========== Enqueue ==========
     enqueue(item, priority) {
-        this.items.push({ item, priority });
-        // Sắp xếp theo priority (chi phí tích lũy gScore)
-        this.items.sort((a, b) => a.priority - b.priority); 
+        const node = { item, priority };
+        this.heap.push(node);
+        this.heapifyUp(this.heap.length - 1);
     }
 
+    heapifyUp(index) {
+        let current = index;
+
+        while (
+            current > 0 &&
+            this.heap[current].priority < this.heap[this.parent(current)].priority
+        ) {
+            this.swap(current, this.parent(current));
+            current = this.parent(current);
+        }
+    }
+
+    // ========== Dequeue ==========
     dequeue() {
-        return this.items.shift();
+        if (this.isEmpty()) return null;
+
+        if (this.heap.length === 1) {
+            return this.heap.pop();
+        }
+
+        const root = this.heap[0];
+        this.heap[0] = this.heap.pop();
+        this.heapifyDown(0);
+
+        return root;
     }
 
+    heapifyDown(index) {
+        let smallest = index;
+        const left = this.left(index);
+        const right = this.right(index);
+
+        if (
+            left < this.heap.length &&
+            this.heap[left].priority < this.heap[smallest].priority
+        ) {
+            smallest = left;
+        }
+
+        if (
+            right < this.heap.length &&
+            this.heap[right].priority < this.heap[smallest].priority
+        ) {
+            smallest = right;
+        }
+
+        if (smallest !== index) {
+            this.swap(index, smallest);
+            this.heapifyDown(smallest);
+        }
+    }
+
+    // ========== Utils ==========
     isEmpty() {
-        return this.items.length === 0;
+        return this.heap.length === 0;
+    }
+
+    peek() {
+        return this.heap[0] || null;
     }
 }
+
 
 /**
  * Thuật toán Dijkstra tìm đường ngắn nhất (theo chi phí) giữa 2 node
@@ -45,6 +117,7 @@ function dijkstra(nodes, graph, startId, goalId) {
     const closedSet = new Set();
     const cameFrom = new Map();
     const gScore = new Map(); // Chi phí thực tế đã đi (g-score)
+    const orderSet = []; // Chứa thứ tự các node đã được thêm vào closedSet
 
     gScore.set(startId, 0);
 
@@ -57,7 +130,8 @@ function dijkstra(nodes, graph, startId, goalId) {
     while (!openSet.isEmpty() && iterations < maxIterations) {
         iterations++;
         // PriorityQueue trả về node có chi phí gScore thấp nhất
-        const { item: current } = openSet.dequeue(); 
+        const { item: current } = openSet.dequeue();
+        orderSet.push(nodes.get(current));
 
         if (current === goalId) {
             // Reconstruct path (giống A*)
@@ -82,6 +156,7 @@ function dijkstra(nodes, graph, startId, goalId) {
                 steps: path.length - 1,
                 distance: totalDistance, // Trả về tổng khoảng cách
                 elapsedTime: elapsedTime, // Thời gian thực thi thuật toán (ms)
+                orderSet: orderSet, // Thứ tự các node đã được xử lý
             };
         }
 

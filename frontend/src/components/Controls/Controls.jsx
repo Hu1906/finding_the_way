@@ -10,7 +10,9 @@ const Controls = ({
   onSelectStart,
   onSelectEnd,
   onFindRoute,
-  onReset
+  onReset,
+  traceVisibility,
+  onChangeTraceVisibility
 }) => {
   return (
     <div className="controls">
@@ -57,6 +59,19 @@ const Controls = ({
       >
         <X size={20} />
         Làm mới
+      </button>
+
+      <button
+        onClick={onChangeTraceVisibility}
+        disabled={loading}
+        className={`control-btn trace ${traceVisibility ? 'active' : ''}`}
+      >
+        <div className="radio-button">
+          <div className={`radio-inner ${traceVisibility ? 'active' : ''}`} />
+        </div>
+        <div className="tract-info">
+          Hiển thị các điểm đã thăm
+        </div>
       </button>
     </div>
   );

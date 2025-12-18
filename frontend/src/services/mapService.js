@@ -72,6 +72,30 @@ export const drawRoute = (map, coordinates) => {
 };
 
 /**
+ * Vẽ trace algorithm lên bản đồ
+ */
+export const drawTraceAlgorithm = (map, coordinates, options = {}) => {
+  if (!window.L || !map) return null;
+
+  const L = window.L;
+
+  const group = L.layerGroup(
+    coordinates.map(p =>
+      L.circleMarker([p.lat, p.lng], {
+        radius: options.radius ?? 3,
+        color: options.color ?? "#1e90ff",
+        fillColor: options.fillColor ?? "#1e90ff",
+        fillOpacity: options.fillOpacity ?? 0.5,
+        weight: 0
+      })
+    )
+  );
+
+  group.addTo(map);
+  return group;
+};
+
+/**
  * Fit bản đồ để hiển thị toàn bộ route
  */
 export const fitBounds = (map, startPoint, endPoint) => {
