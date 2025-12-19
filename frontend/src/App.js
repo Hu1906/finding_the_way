@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Map from './components/Map';
 import Controls from './components/Controls';
 import RouteInfo from './components/RouteInfo';
@@ -14,6 +14,8 @@ function App() {
   const [error, setError] = useState(null);
   const [selectedAlgorithm, setSelectedAlgorithm] = useState('astar');
   const [traceVisible, setTraceVisible] = useState(true);
+  const [currentTraceStep, setCurrentTraceStep] = useState(0);
+  const [checkRouteDisplay, setCheckRouteDisplay] = useState(false);
 
   const {
     startPoint,
@@ -27,7 +29,29 @@ function App() {
     resetMap
   } = useMap(mapContainerRef);
 
+  useEffect(() => {
+    if (!traceVisible || !route || !route?.trace) return;
+    if (currentTraceStep > route.trace.length){
+      if (!checkRouteDisplay) {
+        displayRoute(route);
+        setCheckRouteDisplay(true);
+      }
+      return;
+    }
+
+    const sliceSize = 50; // tùy chỉnh kích thước mỗi lần vẽ / có thể dùng dynamic tùy theo hiệu năng
+    displayTraceAlgorithm(route.trace.slice(0, currentTraceStep + sliceSize));
+
+    const timer = setTimeout(() => {
+      setCurrentTraceStep(currentTraceStep + sliceSize);
+    }, 150); // tùy chỉnh tốc độ vẽ
+
+    return () => clearTimeout(timer);
+  }, [route, currentTraceStep, traceVisible, checkRouteDisplay, displayRoute, displayTraceAlgorithm]);
+
   const handleFindRoute = async () => {
+    if (!startPoint || !endPoint || loading) return;
+
     setLoading(true);
     setError(null);
     setRoute(null);
@@ -38,16 +62,20 @@ function App() {
         endPoint, 
         selectedAlgorithm
       );
+
       if (routeData.startPoint) {
-      // Cập nhật state startPoint bằng tọa độ của node đã snap
-      setStartPoint([routeData.startPoint.lat, routeData.startPoint.lon]);
-    }
-    if (routeData.endPoint) {
-      // Cập nhật state endPoint bằng tọa độ của node đã snap
-      setEndPoint([routeData.endPoint.lat, routeData.endPoint.lon]);
-    }
+        // Cập nhật state startPoint bằng tọa độ của node đã snap
+        setStartPoint([routeData.startPoint.lat, routeData.startPoint.lon]);
+      }
+      
+      if (routeData.endPoint) {
+        // Cập nhật state endPoint bằng tọa độ của node đã snap
+        setEndPoint([routeData.endPoint.lat, routeData.endPoint.lon]);
+      }
+
       setRoute(routeData);
-      displayRoute(routeData);
+      setCurrentTraceStep(0);
+      setCheckRouteDisplay(false);
     } catch (err) {
       setError(err.message);
     } finally {

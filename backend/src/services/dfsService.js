@@ -26,6 +26,7 @@ function dfs(nodes, graph, startId, goalId) {
     const openSet = new Stack();
     const visited = new Set();
     const cameFrom = new Map();
+    const orderSet = []; // Chứa thứ tự các node đã được thêm vào closedSet
 
     openSet.push(startId);
     visited.add(startId);
@@ -36,6 +37,7 @@ function dfs(nodes, graph, startId, goalId) {
     while (!openSet.isEmpty() && iterations < maxIterations) {
         iterations++;
         const current = openSet.pop();
+        orderSet.push(nodes.get(current));
 
         if (current === goalId) {
             const path = [current];
@@ -54,7 +56,13 @@ function dfs(nodes, graph, startId, goalId) {
             const endTime = performance.now();
             const elapsedTime = endTime - startTime;
             console.log(`✅ DFS tìm thấy đường đi từ ${startId} đến ${goalId} sau ${iterations} bước`);
-            return { path, steps: path.length - 1, distance: totalDistance, elapsedTime };
+            return {
+                path,
+                steps: path.length - 1,
+                distance: totalDistance,
+                elapsedTime,
+                orderSet: orderSet, // Thứ tự các node đã được xử lý
+            };
         }
 
         const neighbors = graph.get(current) || new Map();

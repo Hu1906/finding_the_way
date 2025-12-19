@@ -49,6 +49,7 @@ export const findRoute = async (startPoint, endPoint, algorithm = 'astar') => {
       duration: secondsToMinutes(data.duration),
       elapsedTime: data.elapsedTime,
       algorithm: data.algorithm,
+      trace: data.orderSet,
       steps: data.steps,
       raw: data
     };

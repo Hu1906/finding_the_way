@@ -81,10 +81,10 @@ export const drawTraceAlgorithm = (map, coordinates, options = {}) => {
 
   const group = L.layerGroup(
     coordinates.map(p =>
-      L.circleMarker([p.lat, p.lng], {
-        radius: options.radius ?? 3,
-        color: options.color ?? "#1e90ff",
-        fillColor: options.fillColor ?? "#1e90ff",
+      L.circleMarker([p.lat, p.lon], {
+        radius: options.radius ?? 2,
+        color: options.color ?? "#f6933c",
+        fillColor: options.fillColor ?? "#f6933c",
         fillOpacity: options.fillOpacity ?? 0.5,
         weight: 0
       })

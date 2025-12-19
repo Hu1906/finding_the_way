@@ -31,6 +31,7 @@ function bfs(nodes, graph, startId, goalId) {
     const openSet = new Queue();
     const visited = new Set();
     const cameFrom = new Map();
+    const orderSet = []; // Chứa thứ tự các node đã được thêm vào closedSet
 
     openSet.enqueue(startId);
     visited.add(startId);
@@ -41,6 +42,7 @@ function bfs(nodes, graph, startId, goalId) {
     while (!openSet.isEmpty() && iterations < maxIterations) {
         iterations++;
         const current = openSet.dequeue();
+        orderSet.push(nodes.get(current));
 
         if (current === goalId) {
             // Reconstruct path and compute total distance
@@ -66,6 +68,7 @@ function bfs(nodes, graph, startId, goalId) {
                 steps: path.length - 1,
                 distance: totalDistance,
                 elapsedTime,
+                orderSet: orderSet, // Thứ tự các node đã được xử lý
             };
         }
 

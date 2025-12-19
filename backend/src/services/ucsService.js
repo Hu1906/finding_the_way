@@ -33,6 +33,7 @@ function ucs(nodes, graph, startId, goalId) {
     const closedSet = new Set();
     const cameFrom = new Map();
     const gScore = new Map();
+    const orderSet = []; // Chứa thứ tự các node đã được thêm vào closedSet
 
     gScore.set(startId, 0);
     openSet.enqueue(startId, 0);
@@ -43,6 +44,7 @@ function ucs(nodes, graph, startId, goalId) {
     while (!openSet.isEmpty() && iterations < maxIterations) {
         iterations++;
         const { item: current } = openSet.dequeue();
+        orderSet.push(nodes.get(current));
 
         if (current === goalId) {
             const path = [current];
@@ -61,7 +63,13 @@ function ucs(nodes, graph, startId, goalId) {
             const endTime = performance.now();
             const elapsedTime = endTime - startTime;
             console.log(`✅ UCS tìm thấy đường đi từ ${startId} đến ${goalId} sau ${iterations} bước`);
-            return { path, steps: path.length - 1, distance: totalDistance, elapsedTime };
+            return {
+                path,
+                steps: path.length - 1,
+                distance: totalDistance,
+                elapsedTime,
+                orderSet: orderSet, // Thứ tự các node đã được xử lý
+            };
         }
 
         closedSet.add(current);

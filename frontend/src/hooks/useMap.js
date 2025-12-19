@@ -112,21 +112,14 @@ export const useMap = (mapContainerRef) => {
         }
     }, [map, startPoint, endPoint]); // Cần có endPoint trong dependencies
 
-    const displayTraceAlgorithm = useCallback(async (traceData) => {
-        if (!map || !traceData || !traceData.coordinates) return;
+    const displayTraceAlgorithm = useCallback((traceData) => {
+        if (!map || !traceData) return;
         
-        const sliceSize = traceData.length/10 || 1000;
-        const visibleNodes = [];
-
-        for (let i = 0; i < traceData.length; i += sliceSize) {
-            visibleNodes.push(traceData.slice(i, i + sliceSize));
-
-            if (traceLayerRef.current) {
-                map.removeLayer(traceLayerRef.current);
-            }
-            traceLayerRef.current = drawTraceAlgorithm(map, visibleNodes);
-            await new Promise(resolve => setTimeout(resolve, 100)); // Tạm dừng 100ms để tạo hiệu ứng
+        if (traceLayerRef.current) {
+            map.removeLayer(traceLayerRef.current);
         }
+
+        traceLayerRef.current = drawTraceAlgorithm(map, traceData);
 
         if (startPoint && endPoint) {
             fitBounds(map, startPoint, endPoint);
@@ -143,6 +136,11 @@ export const useMap = (mapContainerRef) => {
         if (routeLayerRef.current) {
             map.removeLayer(routeLayerRef.current);
             routeLayerRef.current = null;
+        }
+
+        if (traceLayerRef.current) {
+            map.removeLayer(traceLayerRef.current);
+            traceLayerRef.current = null;
         }
     }, [map]);
 
