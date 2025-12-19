@@ -39,7 +39,7 @@ async function importOSM() {
         console.log('');
 
         // Đọc file OSM và kiểm tra
-        const xmlPath = path.join(__dirname, 'haibatrung.osm');
+        const xmlPath = path.join(__dirname, 'Hà Nội.osm');
         if (!fs.existsSync(xmlPath)) {
             console.error(`❌ File not found: ${xmlPath}`);
             process.exit(1);
