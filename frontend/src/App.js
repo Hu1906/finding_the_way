@@ -39,12 +39,12 @@ function App() {
       return;
     }
 
-    const sliceSize = 50; // tùy chỉnh kích thước mỗi lần vẽ / có thể dùng dynamic tùy theo hiệu năng
+    const sliceSize = 200; // tùy chỉnh kích thước mỗi lần vẽ / có thể dùng dynamic tùy theo hiệu năng
     displayTraceAlgorithm(route.trace.slice(0, currentTraceStep + sliceSize));
 
     const timer = setTimeout(() => {
       setCurrentTraceStep(currentTraceStep + sliceSize);
-    }, 150); // tùy chỉnh tốc độ vẽ
+    }, 50); // tùy chỉnh tốc độ vẽ
 
     return () => clearTimeout(timer);
   }, [route, currentTraceStep, traceVisible, checkRouteDisplay, displayRoute, displayTraceAlgorithm]);
@@ -76,6 +76,10 @@ function App() {
       setRoute(routeData);
       setCurrentTraceStep(0);
       setCheckRouteDisplay(false);
+
+      if (!traceVisible) {
+        displayRoute(routeData);
+      }
     } catch (err) {
       setError(err.message);
     } finally {

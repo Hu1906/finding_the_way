@@ -65,6 +65,7 @@ export const drawRoute = (map, coordinates) => {
 
   const L = window.L;
   return L.polyline(coordinates, {
+    pane: "routePane",
     color: ROUTE_COLOR,
     weight: 5,
     opacity: 0.7
@@ -82,6 +83,7 @@ export const drawTraceAlgorithm = (map, coordinates, options = {}) => {
   const group = L.layerGroup(
     coordinates.map(p =>
       L.circleMarker([p.lat, p.lon], {
+        pane: "tracePane",
         radius: options.radius ?? 2,
         color: options.color ?? "#f6933c",
         fillColor: options.fillColor ?? "#f6933c",

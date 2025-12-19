@@ -24,6 +24,12 @@ export const useMap = (mapContainerRef) => {
             const mapInstance = initializeMap(mapContainerRef.current);
             setMap(mapInstance);
 
+            mapInstance.createPane("tracePane");
+            mapInstance.createPane("routePane");
+
+            mapInstance.getPane("tracePane").style.zIndex = 400;
+            mapInstance.getPane("routePane").style.zIndex = 500;
+
             return () => {
                 mapInstance.remove();
             };
