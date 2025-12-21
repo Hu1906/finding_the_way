@@ -101,7 +101,7 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
-        <h1>Tìm Đường Đi - Hai Bà Trưng, Hà Nội</h1>
+        <h1>Tìm Đường Đi - Hà Nội</h1>
 
         <AlgorithmSelector
           selectedAlgorithm={selectedAlgorithm}
