@@ -58,18 +58,6 @@ graphLoader.loadAll().catch((err) => {
   console.error('Lỗi khi load graph lúc khởi động:', err);
 });
 
-// =============================
-// Serve Frontend (Static Files)
-// =============================
-
-//const frontendPath = path.join(__dirname, '..', 'frontend');
-//app.use(express.static(frontendPath));
-
-// Nếu người dùng nhập URL khác, vẫn trả về index.html
-//app.use((req, res) => {
-  //res.sendFile(path.join(frontendPath, 'index.html'));
-//});
-
 
 // =============================
 // Khởi động Server

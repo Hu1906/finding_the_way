@@ -15,6 +15,8 @@ function App() {
   const [selectedAlgorithm, setSelectedAlgorithm] = useState('astar');
   const [traceVisible, setTraceVisible] = useState(true);
   const [currentTraceStep, setCurrentTraceStep] = useState(0);
+  const [sliceSize, setSliceSize] = useState(200);
+  const MAX_SLICE_SIZE = 4000; 
   const [checkRouteDisplay, setCheckRouteDisplay] = useState(false);
 
   const {
@@ -31,7 +33,7 @@ function App() {
 
   useEffect(() => {
     if (!traceVisible || !route || !route?.trace) return;
-    if (currentTraceStep > route.trace.length){
+    if (currentTraceStep > route.trace.length) {
       if (!checkRouteDisplay) {
         displayRoute(route);
         setCheckRouteDisplay(true);
@@ -39,15 +41,16 @@ function App() {
       return;
     }
 
-    const sliceSize = 200; // tùy chỉnh kích thước mỗi lần vẽ / có thể dùng dynamic tùy theo hiệu năng
+    // vẽ một lát trace theo `sliceSize` hiện tại
     displayTraceAlgorithm(route.trace.slice(0, currentTraceStep + sliceSize));
 
     const timer = setTimeout(() => {
-      setCurrentTraceStep(currentTraceStep + sliceSize);
+      setCurrentTraceStep(prev => prev + sliceSize);
+      setSliceSize(prev => Math.min(prev * 2, MAX_SLICE_SIZE)); // tăng gấp đôi nhưng clamp vào MAX
     }, 50); // tùy chỉnh tốc độ vẽ
 
     return () => clearTimeout(timer);
-  }, [route, currentTraceStep, traceVisible, checkRouteDisplay, displayRoute, displayTraceAlgorithm]);
+  }, [route, currentTraceStep, traceVisible, checkRouteDisplay, displayRoute, displayTraceAlgorithm, sliceSize]);
 
   const handleFindRoute = async () => {
     if (!startPoint || !endPoint || loading) return;
@@ -58,8 +61,8 @@ function App() {
 
     try {
       const routeData = await findRoute(
-        startPoint, 
-        endPoint, 
+        startPoint,
+        endPoint,
         selectedAlgorithm
       );
 
@@ -67,7 +70,7 @@ function App() {
         // Cập nhật state startPoint bằng tọa độ của node đã snap
         setStartPoint([routeData.startPoint.lat, routeData.startPoint.lon]);
       }
-      
+
       if (routeData.endPoint) {
         // Cập nhật state endPoint bằng tọa độ của node đã snap
         setEndPoint([routeData.endPoint.lat, routeData.endPoint.lon]);
@@ -75,6 +78,7 @@ function App() {
 
       setRoute(routeData);
       setCurrentTraceStep(0);
+      setSliceSize(200);
       setCheckRouteDisplay(false);
 
       if (!traceVisible) {
@@ -91,13 +95,14 @@ function App() {
     setRoute(null);
     setError(null);
     resetMap();
+    setSliceSize(200);
   };
 
   return (
     <div className="app">
       <header className="app-header">
         <h1>Tìm Đường Đi - Hai Bà Trưng, Hà Nội</h1>
-        
+
         <AlgorithmSelector
           selectedAlgorithm={selectedAlgorithm}
           onChange={setSelectedAlgorithm}

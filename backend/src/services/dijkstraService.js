@@ -125,7 +125,7 @@ function dijkstra(nodes, graph, startId, goalId) {
     openSet.enqueue(startId, 0); 
 
     let iterations = 0;
-    const maxIterations = 200000;
+    const maxIterations = 150000;
 
     while (!openSet.isEmpty() && iterations < maxIterations) {
         iterations++;

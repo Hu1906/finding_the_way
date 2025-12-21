@@ -105,5 +105,5 @@ export const fitBounds = (map, startPoint, endPoint) => {
 
   const L = window.L;
   const bounds = L.latLngBounds([startPoint, endPoint]);
-  map.fitBounds(bounds, { padding: [50, 50] });
+  map.fitBounds(bounds, { padding: [100, 100] });
 };

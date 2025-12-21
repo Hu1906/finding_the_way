@@ -129,7 +129,7 @@ function greedyBestFirstSearch(nodes, graph, startId, goalId) {
     openSet.enqueue(startId, initialH);
 
     let iterations = 0;
-    const maxIterations = 200000;
+    const maxIterations = 150000;
 
     while (!openSet.isEmpty() && iterations < maxIterations) {
         iterations++;

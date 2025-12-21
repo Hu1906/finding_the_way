@@ -111,7 +111,10 @@ function aStar(nodes, graph, startId, goalId) {
         return null;
     }
 
-    if (startId === goalId) return { path: [startId], steps: 0 };
+    if (startId === goalId) {
+        console.log(`✅ A* bắt đầu và kết thúc tại cùng 1 node: ${startId}`);
+        return { path: [startId], steps: 0 };
+    }
 
     const openSet = new PriorityQueue();
     const closedSet = new Set();
@@ -129,7 +132,7 @@ function aStar(nodes, graph, startId, goalId) {
     openSet.enqueue(startId, initialH);
 
     let iterations = 0;
-    const maxIterations = 200000;
+    const maxIterations = 150000;
 
     while (!openSet.isEmpty() && iterations < maxIterations) {
         iterations++;

@@ -220,7 +220,7 @@ exports.getGraphStats = async (req, res) => {
         let totalEdges = 0;
         
         for (const [nodeId, edges] of graph.entries()) {
-            totalEdges += edges.size; // Sửa lỗi .length thành .size nếu là Map
+            totalEdges += edges.size; 
             if (edges.size > 0) {
                 connectedNodes++;
             }
